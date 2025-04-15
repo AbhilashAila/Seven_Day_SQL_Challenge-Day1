@@ -1,0 +1,119 @@
+--create database Apr_14_2025
+
+--use Apr_14_2025
+
+--CREATE TABLE Departments (
+--    DepartmentID INT PRIMARY KEY,
+--    DepartmentName VARCHAR(100)
+--);
+
+--INSERT INTO Departments (DepartmentID, DepartmentName)
+--VALUES
+--(1, 'HR'),
+--(2, 'Finance'),
+--(3, 'IT'),
+--(4, 'Sales'),
+--(5, 'Marketing');
+
+
+
+--CREATE TABLE Employees (
+--    EmployeeID INT PRIMARY KEY,
+--    FirstName VARCHAR(50),
+--    LastName VARCHAR(50),
+--    DepartmentID INT,
+--    Salary DECIMAL(10, 2),
+--    DateHired DATE,
+--    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+--);
+
+
+--INSERT INTO Employees (EmployeeID, FirstName, LastName, DepartmentID, Salary, DateHired)
+--VALUES
+
+--(1, 'Alice', 'Smith', 1, 60000, '2024-06-10'),  
+--(2, 'Bob', 'Brown', 1, 58000, '2023-07-15'),     
+--(3, 'Carol', 'Davis', 1, 62000, '2022-08-12'),  
+--(4, 'David', 'Evans', 1, 50000, '2019-01-10'),  
+--(5, 'Eve', 'Foster', 1, 55000, '2016-11-22'),  
+--(6, 'Frank', 'Green', 2, 75000, '2021-03-15'),  
+--(7, 'Grace', 'Hill', 2, 78000, '2023-09-01'),   
+--(8, 'Heidi', 'Iverson', 2, 72000, '2020-05-05'),
+--(9, 'Ivan', 'Johnson', 2, 80000, '2025-02-10'), 
+--(10, 'Judy', 'King', 2, 77000, '2017-06-25'),   
+--(11, 'Kevin', 'Lewis', 3, 95000, '2021-04-15'), 
+--(12, 'Laura', 'Martin', 3, 90000, '2024-01-20'),
+--(13, 'Mallory', 'Nelson', 3, 85000, '2015-10-10'),
+--(14, 'Nina', 'Owens', 3, 87000, '2022-05-30'),  
+--(15, 'Oscar', 'Perez', 3, 91000, '2021-11-12'), 
+--(16, 'Peggy', 'Quinn', 4, 66000, '2024-03-10'), 
+--(17, 'Quinn', 'Reed', 4, 69000, '2019-07-15'),  
+--(18, 'Ruth', 'Stone', 4, 64000, '2020-09-18'),  
+--(19, 'Steve', 'Thomas', 4, 70000, '2025-03-20'),
+--(20, 'Trudy', 'Underwood', 4, 68000, '2016-05-09'),
+--(21, 'Uma', 'Vargas', 5, 72000, '2022-08-20'), 
+--(22, 'Victor', 'White', 5, 74000, '2023-11-15'),
+--(23, 'Wendy', 'Xu', 5, 73000, '2021-10-12'),    
+--(24, 'Xavier', 'Young', 5, 71000, '2017-02-05'),
+--(25, 'Yvonne', 'Zimmer', 5, 69000, '2018-09-25');
+
+
+--select * from Employees
+--select * from Departments
+
+--1. Find Top 3 highest-paid employees in each department
+
+--with cte as (
+--select 
+--EmployeeID,
+--FirstName,
+--LastName,
+--DepartmentName,
+--Salary,
+--DENSE_RANK() over(partition by departmentname order by salary desc) as dr
+--from Employees e
+--join
+-- Departments d
+-- on e.DepartmentID = d.DepartmentID)
+-- select 
+-- EmployeeID,
+--FirstName,
+--LastName,
+--DepartmentName,
+--Salary
+-- from cte
+-- where dr <=3
+
+--2.  Find the average salary of employees hire in the last 5 year
+
+--select 
+--AVG(Salary) as Avg_Salary
+--from Employees
+--where DateHired >= DATEADD(YEAR,-5,GETDATE())
+
+--3. Find the Employees whose salary is less than the average salary of employees hired in last 5 years
+
+--select * from Employees
+--where Salary <(
+--select 
+--AVG(Salary) as Avg_Salary
+--from Employees
+--where DateHired >= DATEADD(YEAR,-5,GETDATE())
+--)
+
+--4. For each department, find the employee with the maximum tenure (earliest DateHired), and display their name, salary, and hire date.
+--with cte as (
+--select *,
+--DATEDIFF(YY,datehired,getdate()) as No_Of_years,
+--ROW_NUMBER() over(partition by departmentid order by datehired asc) as rn
+--from Employees
+--)
+--select 
+--FirstName, LastName,Salary,DateHired,No_Of_years
+--from cte 
+--where rn = 1
+
+
+
+
+
