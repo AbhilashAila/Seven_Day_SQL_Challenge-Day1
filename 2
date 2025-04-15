@@ -1,0 +1,126 @@
+--create database Apr_15_2025
+--use Apr_15_2025
+
+
+--CREATE TABLE Order_Info (
+--    OrderID INT PRIMARY KEY,
+--    CustomerID VARCHAR(10),
+--    OrderDate DATE,
+--    Product VARCHAR(50),
+--    Quantity INT,
+--    Price DECIMAL(10, 2)
+--);
+
+--INSERT INTO Order_Info (OrderID, CustomerID, OrderDate, Product, Quantity, Price) VALUES
+--(101, 'C001', '2025-01-15', 'Laptop',    1, 1000.00),
+--(102, 'C002', '2025-01-16', 'Mouse',     2,   25.00),
+--(103, 'C001', '2025-01-20', 'Monitor',   1,  200.00),
+--(104, 'C003', '2025-01-22', 'Keyboard',  1,   45.00),
+--(105, 'C002', '2025-02-01', 'Laptop',    1,  950.00),
+--(106, 'C004', '2025-02-05', 'Mouse',     3,   20.00),
+--(107, 'C001', '2025-02-10', 'Laptop',    2,  980.00),
+--(108, 'C005', '2025-02-12', 'Monitor',   2,  210.00),
+--(109, 'C006', '2025-02-14', 'Mouse',     1,   22.00),
+--(110, 'C007', '2025-02-16', 'Keyboard',  2,   50.00),
+--(111, 'C005', '2025-02-18', 'Laptop',    1, 1020.00),
+--(112, 'C008', '2025-02-20', 'Monitor',   1,  190.00),
+--(113, 'C009', '2025-02-21', 'Mouse',     4,   18.00),
+--(114, 'C006', '2025-02-22', 'Laptop',    1,  970.00),
+--(115, 'C007', '2025-02-23', 'Monitor',   3,  195.00),
+--(116, 'C001', '2025-02-24', 'Keyboard',  1,   47.00),
+--(117, 'C003', '2025-02-25', 'Mouse',     5,   19.00),
+--(118, 'C002', '2025-02-26', 'Laptop',    1,  990.00),
+--(119, 'C004', '2025-02-27', 'Keyboard',  2,   49.00),
+--(120, 'C009', '2025-02-28', 'Monitor',   1,  210.00),
+--(121, 'C005', '2025-03-01', 'Laptop',    1,  975.00),
+--(122, 'C008', '2025-03-02', 'Mouse',     2,   20.00),
+--(123, 'C007', '2025-03-03', 'Keyboard',  3,   48.00),
+--(124, 'C002', '2025-03-04', 'Monitor',   1,  205.00),
+--(125, 'C003', '2025-03-05', 'Laptop',    2,  960.00),
+--(126, 'C001', '2025-03-06', 'Mouse',     3,   21.00),
+--(127, 'C006', '2025-03-07', 'Keyboard',  1,   46.00),
+--(128, 'C004', '2025-03-08', 'Laptop',    1,  985.00);
+
+
+
+--1.How many orders were placed in January 2025?
+
+--select 
+--COUNT(OrderID) as Total_Orders
+--from Order_Info
+--where Year(OrderDate) = 2025
+--and MONTH(OrderDate) = 1
+
+
+--2.Which customer placed the most number of orders?
+
+--select Top 1 CustomerID,COUNT(OrderID) as cnt
+--from Order_Info
+--group by CustomerID
+--order by cnt desc
+
+
+--3.What is the total revenue from all orders?
+
+--select 
+--sum(Quantity * Price) as Total 
+--from Order_Info
+
+
+--4. Find the average price of Laptop  sold.
+
+--select AVG(Quantity * Price) as Avg_Laptop
+--from Order_Info
+--where Product = 'Laptop'
+
+
+--select sum(Quantity * Price) as Avg_Laptop
+--from Order_Info
+--where Product = 'Laptop'
+
+
+--5. List customers who have ordered more than once.
+
+--select CustomerID,COUNT(*) as cnt
+--from Order_Info
+--group by CustomerID
+--having COUNT(*)>1
+
+--6.Which product generated the highest total revenue?
+
+--select top 1 Product,SUM(Quantity * Price) as total
+--from Order_Info
+--group by Product
+--order by total desc
+
+
+--7.Get the first order date for each customer.
+--with cte as (
+--select *,
+--ROW_NUMBER() over(partition by customerid order by orderdate ) as rn
+--from Order_Info
+--)
+--select * from cte 
+--where rn = 1
+
+--8. Find the month-wise total revenue.
+
+--select FORMAT(Orderdate , 'MMM') as Month ,
+--             SUM(Quantity * Price) as Total_Revenue
+--from Order_Info
+--             group by  FORMAT(Orderdate , 'MMM')
+
+
+--9. Which customer spent the most overall?
+
+--select Top 1 CustomerID, SUM(Quantity * Price) as Total_Spent
+--from Order_Info
+--group by CustomerID
+
+--10. List the most frequently purchased product.
+
+--select top 1
+--Product, COUNT(*) as cnt
+--from Order_Info
+--group by Product
+--order by cnt desc
