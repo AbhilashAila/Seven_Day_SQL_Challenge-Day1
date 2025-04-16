@@ -1,0 +1,184 @@
+--create database Apr_16_2025
+
+--use Apr_16_2025
+
+--CREATE TABLE persons (
+--    id int identity (1,1) PRIMARY KEY,
+--    full_name VARCHAR(100)
+--);
+
+---- Insert data
+--INSERT INTO persons (full_name) VALUES
+--('John Doe'),
+--('Emma Watson'),
+--('Emily Rose Pattrick'),
+--('Robert Downey'),
+--('Chris Evans'),
+--('Scarlett Johansson');
+
+--1. Write a SQL query to split a full name column into first name and last name. Assume the names are separated by a single space.
+
+--select *,
+--LEFT(full_name,CHARINDEX(' ' , full_name)-1) as first_name,
+--RIGHT(full_name,LEN(full_name) - CHARINDEX(' ',full_name) ) as last_name
+--from persons
+
+--CREATE TABLE students (
+--    student_name VARCHAR(50),
+--    subject VARCHAR(50),
+--    marks INT
+--);
+
+---- 2. Insert records into the student table
+--INSERT INTO students (student_name, subject, marks) VALUES
+--('Alice', 'Math', 65),
+--('Alice', 'Science', 80),
+--('Alice', 'English', 78),
+--('Bob', 'Math', 82),
+--('Bob', 'Science', 85),
+--('Bob', 'English', 88),
+--('Catherine', 'Math', 70),
+--('Catherine', 'Science', 72),
+--('Catherine', 'English', 68),
+--('Daniel', 'Math', 99);
+
+--2.  Find out the Studentwise Total Marks for Top 2 Subjects
+
+
+--select 
+--student_name,
+--SUM(marks) as Total
+--from (
+--select *,
+--DENSE_RANK() over(partition by student_name order by marks desc) as dr
+--from students
+--) a
+--where dr <=2
+--group by student_name
+
+
+
+-- Create Authors table
+--CREATE TABLE Authors (
+--    AuthorID INT PRIMARY KEY,
+--    AuthorName VARCHAR(100)
+--);
+
+---- Create Books table
+--CREATE TABLE Books (
+--    BookID INT PRIMARY KEY,
+--    AuthorID INT,
+--    BookTitle VARCHAR(200),
+--    PublicationYear DATE,
+--    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)
+--);
+
+---- Insert records into Authors table
+--INSERT INTO Authors (AuthorID, AuthorName) VALUES
+--(1, 'Author A'),
+--(2, 'Author B'),
+--(3, 'Author C'),
+--(4, 'Author D'),
+--(5, 'Author E');
+
+---- Insert records into Books table
+--INSERT INTO Books (BookID, AuthorID, BookTitle, PublicationYear) VALUES
+--(1, 1, 'Book 1 by Author A', '2023-01-15'),
+--(2, 1, 'Book 2 by Author A', '2023-07-20'),
+--(3, 2, 'Book 1 by Author B', '2022-03-10'),
+--(4, 2, 'Book 2 by Author B', '2023-05-05'),
+--(5, 3, 'Book 1 by Author C', '2023-06-25'),
+--(6, 3, 'Book 2 by Author C', '2021-08-15'),
+--(7, 4, 'Book 1 by Author D', '2022-09-30'),
+--(8, 4, 'Book 2 by Author D', '2023-12-05'),
+--(9, 5, 'Book 1 by Author E', '2023-04-17'),
+--(10, 5, 'Book 2 by Author E', '2020-11-01');
+
+
+--1. List all authors and number of books written
+
+--select 
+--a.AuthorName,
+--COUNT(b.BookID) as No_Of_Books
+--from Authors a
+--left join  Books b
+--on a.AuthorID = b.AuthorID
+--group by a.AuthorName
+
+
+--2. Find books published in the last year and corresponding authors
+
+--DECLARE @Today DATE = '2024-01-01';
+
+--select 
+--a.AuthorName,
+--b.BookTitle
+--from Authors a
+--left join Books b
+--on a.AuthorID=b.AuthorID
+--where PublicationYear >= DATEADD(Year,-1,@Today)
+
+
+---- Create Products table
+--CREATE TABLE Products (
+--    ProductID INT PRIMARY KEY,
+--    ProductName VARCHAR(100),
+--    ProductPrice DECIMAL(10, 2)
+--);
+
+---- Create Orders table
+--CREATE TABLE Orders (
+--    OrderID INT PRIMARY KEY,
+--    ProductID INT,
+--    Quantity INT,
+--    OrderDate DATE,
+--    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+--);
+
+---- Insert records into Products table
+--INSERT INTO Products (ProductID, ProductName, ProductPrice) VALUES
+--(1, 'Product A', 10.00),
+--(2, 'Product B', 15.00),
+--(3, 'Product C', 20.00),
+--(4, 'Product D', 25.00),
+--(5, 'Product E', 30.00),
+--(6, 'Product F', 35.00),
+--(7, 'Product G', 40.00),
+--(8, 'Product H', 45.00),
+--(9, 'Product I', 50.00),
+--(10, 'Product J', 55.00);
+
+---- Insert records into Orders table
+--INSERT INTO Orders (OrderID, ProductID, Quantity, OrderDate) VALUES
+--(1, 1, 2, '2023-07-01'),
+--(2, 2, 1, '2023-07-02'),
+--(3, 3, 5, '2023-07-03'),
+--(4, 1, 3, '2023-07-04'),
+--(5, 5, 2, '2023-07-05'),
+--(6, 6, 1, '2023-07-06'),
+--(7, 2, 4, '2023-07-07'),
+--(8, 8, 3, '2023-07-08'),
+--(9, 9, 1, '2023-07-09'),
+--(10, 10, 2, '2023-07-10');
+
+
+--1. Retrieve the total revenue generated from each product.
+
+--select 
+--p.ProductName,
+--SUM(p.ProductPrice * o.Quantity) as Total_revenue
+--from Orders o
+--join  Products p
+--on o.ProductID = p.ProductID
+--group by p.ProductName
+
+
+
+--2. Find products that have not been ordered at all.
+
+--select 
+--p.ProductName
+--from Orders o
+--right join  Products p
+--on o.ProductID = p.ProductID
+--where o.ProductID is null
